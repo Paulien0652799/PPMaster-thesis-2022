@@ -1,0 +1,1 @@
+perl metavarFilter.pl -i output_DiscoSnp++.vcf -p prefix_ -a 8 -c 3
