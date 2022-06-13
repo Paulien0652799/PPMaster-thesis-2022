@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+#PBS -l nodes=1:ppn=1
+#PBS -l walltime=04:00:00
+#PBS -l pmem=16gb
+#PBS -A default_project
+
+cd /vsc-hard-mounts/leuven-data/341/vsc34135/Ofunato
+while IFS=, read -r Biosample sra_experiment sra_run location depth date; do
+        echo "$Biosample, $sra_experiment, $sra_run, $location, $depth, $date " ;
+        curl -o ofunato1.fastq.bz.1 -X GET "https://ddbj.nig.ac.jp/public/ddbj_database/dra/fastq/DRA005/DRA005744/{$sra_experiment}/{$sra_run}_1.fastq.bz2"
+        bzcat ofunato1.fastq.bz.1 | gzip -c > {$Biosample}.1.gz
+        rm ofunato1.fastq.bz.1
+        curl -o ofunato1.fastq.bz.2 -X GET "https://ddbj.nig.ac.jp/public/ddbj_database/dra/fastq/DRA005/DRA005744/{$sra_experiment}/{$sra_run}_2.fastq.bz2"
+        bzcat ofunato1.fastq.bz.2 | gzip -c > {$Biosample}.2.gz
+        rm ofunato1.fastq.bz.2
+done <- raw.reads.txt
